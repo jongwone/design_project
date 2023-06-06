@@ -18,7 +18,7 @@ class BoardPostPage extends StatefulWidget {
 
 class _BoardPostPage extends State<BoardPostPage> {
   final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
-
+  bool _btnVisible = false;
   User? loggedUser; // loggedUser 변수 선언
 
   final List<Marker> _markers = [];
@@ -98,32 +98,32 @@ class _BoardPostPage extends State<BoardPostPage> {
                         const Padding(
                           padding: EdgeInsets.fromLTRB(0, 16, 0, 4),
                         ),
-
                         // 제목 및 카테고리
                         buildPostContext(postEntity!, profileEntity!, context),
-                        // Text("Max Person : ${postEntity!.getPostMaxPerson()}"),
-                        // Text("Gender Limit : ${postEntity!.getPostGender()}"),
+
                       ]),
                 ),
               )),
                 Padding(
                   padding: EdgeInsets.all(20.0),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 18),
-                      child: InkWell(
-                          onTap: () {
-                            if (isSameId){
-                              showModalBottomSheet(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      _buildModalSheet(context, postEntity!.getPostId()),
-                                  backgroundColor: Colors.transparent);
-                            } else {
-                              postEntity!.applyToPost(userID);
-                            }
-                          },
+                  child:
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 18),
+                        child: InkWell(
+                            onTap: () {
+                              if(isSameId){
+                                showModalBottomSheet(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        _buildModalSheet(context, postEntity!.getPostId()),
+                                    backgroundColor: Colors.transparent);
+                              } else{
+                                postEntity!.applyToPost(userID);
+                                showAlert("신청이 완료되었습니다!", context, Colors.grey);
+                              }
+                            },
                           child: SizedBox(
                             height: 50,
                             width: MediaQuery.of(context).size.width - 40,
@@ -158,7 +158,7 @@ class _BoardPostPage extends State<BoardPostPage> {
                     ),
                   ),
                 ),
-            ]));
+                ]));
   }
 
   @override
@@ -178,7 +178,6 @@ class _BoardPostPage extends State<BoardPostPage> {
         checkWriterId(postEntity!.getWriterId());
       });
     });
-    //postEntity!.makeTestingPost();
   }
 
 
